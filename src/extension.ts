@@ -51,6 +51,12 @@ const commands: { [key: string]: Command } = {
         preRunCallback: undefined,
         postRunCallback: undefined,
     },
+    findWithinSingleFile: {
+        script: 'find_within_single_file',
+        uri: undefined,
+        preRunCallback: undefined,
+        postRunCallback: undefined,
+    },
     findWithinFilesWithType: {
         script: 'find_within_files',
         uri: undefined,
@@ -261,6 +267,7 @@ function setupConfig(context: vscode.ExtensionContext) {
     commands.findFilesWithType.uri = localScript(commands.findFiles.script);
     commands.findWithinFiles.uri = localScript(commands.findWithinFiles.script);
     commands.findWithinFilesWithType.uri = localScript(commands.findWithinFiles.script);
+    commands.findWithinSingleFile.uri = localScript(commands.findWithinSingleFile.script);
     commands.listSearchLocations.uri = localScript(commands.listSearchLocations.script);
     commands.flightCheck.uri = localScript(commands.flightCheck.script);
 }
@@ -541,6 +548,8 @@ function reinitialize() {
     //
     CFG.tempDir = fs.mkdtempSync(`${tmpdir()}${path.sep}${CFG.extensionName}-`);
     CFG.canaryFile = path.join(CFG.tempDir, 'snitch');
+    // DEBUG
+    // CFG.canaryFile = '/Users/rishipatel/Projects/thirdparty/vscode-finditfaster-rkpatel/manual-test-snitch';
     CFG.selectionFile = path.join(CFG.tempDir, 'selection');
     CFG.lastQueryFile = path.join(CFG.tempDir, 'last_query');
     CFG.lastPosFile = path.join(CFG.tempDir, 'last_position');
@@ -673,6 +682,8 @@ function createTerminal() {
             FIND_WITHIN_FILES_PREVIEW_ENABLED: CFG.findWithinFilesPreviewEnabled ? '1' : '0',
             FIND_WITHIN_FILES_PREVIEW_COMMAND: CFG.findWithinFilesPreviewCommand,
             FIND_WITHIN_FILES_PREVIEW_WINDOW_CONFIG: CFG.findWithinFilesPreviewWindowConfig,
+            // Turn off previews in single file search mode, not needed
+            FIND_WITHIN_SINGLE_FILE_PREVIEW_ENABLED: '0',
             USE_GITIGNORE: CFG.useGitIgnoreExcludes ? '1' : '0',
             GLOBS: CFG.useWorkspaceSearchExcludes ? getIgnoreString() : '',
             CANARY_FILE: CFG.canaryFile,
@@ -693,9 +704,10 @@ function getWorkspaceFoldersAsString() {
     return CFG.searchPaths.reduce((x, y) => x + ` '${y}'`, '');
 }
 
-function getCommandString(cmd: Command, withArgs: boolean = true, withTextSelection: boolean = true) {
+function getCommandString(cmd: Command, withArgs: boolean = true, withTextSelection: boolean = true, searchInCurrentEditor: boolean = false) {
     assert(cmd.uri);
     let ret = '';
+    const currentEditorPath = vscode.window.activeTextEditor?.document.uri.fsPath;
     const cmdPath = cmd.uri.fsPath;
     if (CFG.useEditorSelectionAsQuery && withTextSelection) {
         const editor = vscode.window.activeTextEditor;
@@ -733,6 +745,10 @@ function getCommandString(cmd: Command, withArgs: boolean = true, withTextSelect
     if (withArgs) {
         let paths = getWorkspaceFoldersAsString();
         ret += ` ${paths}`;
+    }
+    // Add current file arg to make single file search set variable
+    if (searchInCurrentEditor && currentEditorPath) {
+        ret += ` '${currentEditorPath}'`;
     }
     return ret;
 }
@@ -792,8 +808,15 @@ async function executeTerminalCommand(cmd: string) {
     const cb = commands[cmd].preRunCallback;
     let cbResult = true;
     if (cb !== undefined) { cbResult = await cb(); }
+
+    // Single file search mode
+    let searchInCurrentEditor = false;
+    if (cmd === 'findWithinSingleFile') { searchInCurrentEditor = true; }
+
+    // If the preRunCallback callback result was false, we don't want to run the command
     if (cbResult === true) {
-        term.sendText(getCommandString(commands[cmd]));
+        // Send the command to the terminal and execute it
+        term.sendText(getCommandString(commands[cmd], false, true, searchInCurrentEditor));
         if (CFG.showMaximizedTerminal) {
             vscode.commands.executeCommand('workbench.action.toggleMaximizedPanel');
         }

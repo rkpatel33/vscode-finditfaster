@@ -1,10 +1,10 @@
 {
   "name": "find-it-faster",
-  "displayName": "FindItFaster",
-  "publisher": "TomRijndorp",
+  "displayName": "FindItFaster-Rkp",
+  "publisher": "rkpatel33",
   "icon": "media/icon.png",
   "repository": {
-    "url": "https://github.com/tomrijndorp/vscode-finditfaster"
+    "url": "https://github.com/rkpatel33/vscode-finditfaster"
   },
   "description": "Find it, but faster! Leveraging fzf and rg.",
   "keywords": [
@@ -237,6 +237,7 @@
     "test": "node ./out/test/runTest.js",
     "vscode:package": "vsce package --githubBranch main",
     "vscode:publish": "vsce publish --githubBranch main",
+    "vscode:install-local": "vsce package -o out-vsix/find-it-faster.vsix; code --install-extension out-vsix/find-it-faster.vsix",
     "minimist": ">=1.2.6",
     "qs": ">=6.10.3",
     "ansi-regex": ">=5.0.1",

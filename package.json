@@ -1,7 +1,7 @@
 {
-  "name": "find-it-faster-custom",
-  "displayName": "FindItFaster",
-  "publisher": "TomRijndorp",
+  "name": "find-it-faster-rkp",
+  "displayName": "FindItFaster Rkp",
+  "publisher": "Rkp",
   "icon": "media/icon.png",
   "repository": {
     "url": "https://github.com/rkpatel33/vscode-finditfaster/"
@@ -32,14 +32,14 @@
     "Other"
   ],
   "activationEvents": [
+    "onCommand:extension.openMyExtension",
+    "onCommand:extension.useMyExtension",
     "onCommand:find-it-faster.findFiles",
     "onCommand:find-it-faster.findFilesWithType",
     "onCommand:find-it-faster.findWithinFiles",
     "onCommand:find-it-faster.findWithinFilesWithType",
     "onCommand:find-it-faster.findWithinSingleFile",
     "onCommand:find-it-faster.listSearchLocations",
-    "onCommand:extension.openMyExtension",
-    "onCommand:extension.useMyExtension"
   ],
   "main": "./out/extension.js",
   "contributes": {

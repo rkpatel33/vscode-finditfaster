@@ -160,10 +160,23 @@ FILE=$@
 # 	| fzf --ansi --no-sort --reverse --delimiter : --nth 3.. --preview "bat $FILE --color=always -H {1} --line-range {1}:" )
 
 # Use rg to cat out the file with line numbers, then pipe to fzf
+
+# Documenet
+# --------------------------------------------------------------------------------------
+# | fzf --ansi \                        # Colorize
+#       --no-sort \                     # Order in file oder
+#       --reverse \                     # Prompt at top, lines in line order
+#       --delimiter : \                 # Split on :, here line:column:linetext
+#       --nth 3.. \                     # Match on 3rd column and beyond
+#
+
+
+# Preview from match line to end of file
+# --preview "bat $FILE --color=always -H {1} --line-range {1}:"
+
+
 SELECTED_LINE=$(
-    rg --column \
-       --hidden \
-       --line-number \
+    rg --line-number \
        --no-heading \
        --color=always \
        --smart-case \
@@ -175,7 +188,7 @@ SELECTED_LINE=$(
           --no-sort \
           --reverse \
           --delimiter : \
-          --nth 3.. \
+          --nth 2.. \
           --preview "bat $FILE --color=always -H {1} --line-range {1}:"
 )
 

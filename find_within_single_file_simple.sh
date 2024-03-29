@@ -165,14 +165,27 @@ FILE=$@
 # Preview from match line to end of file
 # --preview "bat $FILE --color=always -H {1} --line-range {1}:"
 
-# Documenet
-# --------------------------------------------------------------------------------------
-# | fzf --ansi \                        # Colorize
-#       --no-sort \                     # Order in file oder
-#       --reverse \                     # Prompt at top, lines in line order
-#       --delimiter : \                 # Split on :, here line:column:linetext
-#       --nth 3.. \                     # Match on 3rd column and beyond
-#
+# 'rg' is used for searching the file:
+#   --line-number      : Outputs the line number of each match.
+#   --no-heading       : Omits file headers when more than one file is searched.
+#   --color=always     : Forces color output even when piping to another command.
+#   --smart-case       : Searches case-insensitively unless the query contains uppercase letters.
+#   --colors match:fg:green etc. : Customizes the color of the match, path, and style.
+#   2> /dev/null       : Redirects any error messages to /dev/null (effectively ignoring them).
+# '^'                  : The pattern being searched; '^' represents the start of a line.
+# $FILE                : The file being searched.
+
+# 'fzf' is used for selecting from the search results:
+#   --query "$QUERY"   : Pre-fills the search input with the value of $QUERY.
+#   --ansi             : Enables ANSI color codes support.
+#   --no-sort          : Disables sorting; the original order from 'rg' is preserved.
+#   --reverse          : Starts the list from the bottom of the screen.
+#   --delimiter :      : Sets ':' as the delimiter for splitting fields.
+#   --nth 2..          : Hides the first field (line number) in the fzf UI.
+#   --color, --border, etc. : Customizes the appearance of the 'fzf' interface.
+#   --preview          : Uses 'bat' to display a preview of the file with the highlighted match.
+
+# The final 'cut' command extracts the line number from the selection.
 
 LINE_NUMBER=$(
 rg \

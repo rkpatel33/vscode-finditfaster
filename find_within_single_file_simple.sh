@@ -161,6 +161,10 @@ FILE=$@
 
 # Use rg to cat out the file with line numbers, then pipe to fzf
 
+# OLD:
+# Preview from match line to end of file
+# --preview "bat $FILE --color=always -H {1} --line-range {1}:"
+
 # Documenet
 # --------------------------------------------------------------------------------------
 # | fzf --ansi \                        # Colorize
@@ -169,11 +173,6 @@ FILE=$@
 #       --delimiter : \                 # Split on :, here line:column:linetext
 #       --nth 3.. \                     # Match on 3rd column and beyond
 #
-
-
-# Preview from match line to end of file
-# --preview "bat $FILE --color=always -H {1} --line-range {1}:"
-
 
 SELECTED_LINE=$(
     rg --line-number \

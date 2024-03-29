@@ -57,6 +57,12 @@ const commands: { [key: string]: Command } = {
         preRunCallback: selectTypeFilter,
         postRunCallback: () => { CFG.useTypeFilter = false; },
     },
+    findWithinSingleFileOld: {
+        script: 'find_within_single_file',
+        uri: undefined,
+        preRunCallback: undefined,
+        postRunCallback: undefined,
+    },
     findWithinSingleFile: {
         // script: 'find_within_single_file',
         script: 'find_within_single_file_simple',
@@ -274,6 +280,7 @@ function setupConfig(context: vscode.ExtensionContext) {
     commands.listSearchLocations.uri = localScript(commands.listSearchLocations.script);
     commands.flightCheck.uri = localScript(commands.flightCheck.script);
     commands.findWithinSingleFile.uri = localScript(commands.findWithinSingleFile.script);
+    commands.findWithinSingleFileOld.uri = localScript(commands.findWithinSingleFileOld.script);
 }
 
 /** Register the commands we defined with VS Code so users have access to them */
@@ -820,6 +827,7 @@ async function executeTerminalCommand(cmd: string) {
     // Single file search mode
     let searchInCurrentEditor = false;
     if (cmd === 'findWithinSingleFile') { searchInCurrentEditor = true; }
+    if (cmd === 'findWithinSingleFileOld') { searchInCurrentEditor = true; }
 
     if (cbResult === true) {
         term.sendText(getCommandString(commands[cmd], true, true, searchInCurrentEditor));

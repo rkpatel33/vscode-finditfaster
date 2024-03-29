@@ -174,23 +174,28 @@ FILE=$@
 #       --nth 3.. \                     # Match on 3rd column and beyond
 #
 
-SELECTED_LINE=$(
-    rg --line-number \
-       --no-heading \
-       --color=always \
-       --smart-case \
-       --colors match:fg:green \
-       --colors path:fg:white \
-       --colors path:style:nobold \
-       2> /dev/null '^' $FILE \
-    | fzf --ansi \
-          --no-sort \
-          --reverse \
-          --delimiter : \
-          --nth 2.. \
-          --preview "bat $FILE --color=always -H {1} --line-range {1}:"
+LINE_NUMBER=$(
+rg \
+	--line-number \
+	--no-heading \
+	--color=always \
+	--smart-case \
+	--colors match:fg:green \
+	--colors path:fg:white \
+	--colors path:style:nobold 2> /dev/null '^' $FILE \
+	| fzf \
+		--ansi \
+		--no-sort \
+		--reverse \
+		--delimiter : \
+		--nth 2.. \
+		--color='dark' \
+		--border=double \
+		--info=inline \
+		--prompt='$>' \
+		--pointer='→' \
+		--preview "bat $FILE --color=always -H {1} --line-range {1}:" \
+		| cut -d':' -f1
 )
-
-LINE_NUMBER=$(echo "$SELECTED_LINE" | cut -d':' -f1)
 
 echo "$FILE_PATH":$LINE_NUMBER > "$CANARY_FILE"

@@ -184,6 +184,7 @@ rg \
 	--colors path:fg:white \
 	--colors path:style:nobold 2> /dev/null '^' $FILE \
 	| fzf \
+        --query "$QUERY" \
 		--ansi \
 		--no-sort \
 		--reverse \

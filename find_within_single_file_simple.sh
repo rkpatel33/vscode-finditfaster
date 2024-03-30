@@ -208,7 +208,7 @@ rg \
 		--info=inline \
 		--prompt='$>' \
 		--pointer='→' \
-		--preview "bat $FILE --color=always -H {1} --line-range {1}:" \
+		--preview "bat $FILE --style=numbers --color=always -H {1} --line-range {1}:" \
 		| cut -d':' -f1
 )
 

@@ -43,7 +43,7 @@ HAS_SELECTION=${HAS_SELECTION:-}
 RESUME_SEARCH=${RESUME_SEARCH:-}
 FUZZ_RG_QUERY=${FUZZ_RG_QUERY_SINGLE_FILE:-}
 # We match against the beginning of the line so everything matches but nothing gets highlighted...
-QUERY='^'
+QUERY=''
 INITIAL_QUERY=''  # Don't show initial "^" regex in fzf
 INITIAL_POS='1'
 if [[ "$RESUME_SEARCH" -eq 1 ]]; then

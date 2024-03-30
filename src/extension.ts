@@ -559,7 +559,7 @@ function reinitialize() {
     //
     CFG.tempDir = fs.mkdtempSync(`${tmpdir()}${path.sep}${CFG.extensionName}-`);
     // DEBUG: Send debug output to a stable file folder so you can inspect it
-    CFG.tempDir = '/tmp/find-it-faster';
+    // CFG.tempDir = '/tmp/find-it-faster';
     CFG.canaryFile = path.join(CFG.tempDir, 'snitch');
     CFG.selectionFile = path.join(CFG.tempDir, 'selection');
     CFG.lastQueryFile = path.join(CFG.tempDir, 'last_query');

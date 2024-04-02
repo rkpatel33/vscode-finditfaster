@@ -32,13 +32,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:find-it-faster.findFiles",
-    "onCommand:find-it-faster.findFilesWithType",
-    "onCommand:find-it-faster.findWithinFiles",
-    "onCommand:find-it-faster.findWithinFilesWithType",
-    "onCommand:find-it-faster.listSearchLocations",
-    "onCommand:find-it-faster.findWithinSingleFile",
-    "onCommand:find-it-faster.findWithinSingleFileOld"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -58,10 +52,6 @@
       {
         "command": "find-it-faster.findWithinSingleFile",
         "title": "Find It Faster: search within a single file"
-      },
-      {
-        "command": "find-it-faster.findWithinSingleFileOld",
-        "title": "Find It Faster: search within a single file OLD"
       },
       {
         "command": "find-it-faster.findWithinFilesWithType",
